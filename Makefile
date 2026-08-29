@@ -1,5 +1,6 @@
 STUID = 251220081
 STUNAME = 伍知行
+TOKEN = vP3JBg6w
 
 # DO NOT modify the following code!!!
 
