@@ -49,6 +49,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
+  printf("cmd_q called\n");
   return -1;
 }
 
