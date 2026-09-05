@@ -31,6 +31,6 @@ int main(int argc, char *argv[]) {
   /* Start engine. */
   engine_start();
 
-  printf("NEMU_STATE: %d\n", nemu_state.state);
+  // printf("NEMU_STATE: %d\n", nemu_state.state);
   return is_exit_status_bad();
 }
