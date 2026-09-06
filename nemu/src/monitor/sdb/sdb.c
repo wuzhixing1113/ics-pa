@@ -53,20 +53,7 @@ static int cmd_q(char *args) {
   return -1;
 }
 
-static int cmd_si(char *args) {
-  if (args == NULL) { // Default: N = 1
-    cpu_exec(1);
-  }
-  else {
-    int64_t N;
-    if (sscanf(args, "%ld", &N) != 1 || N <= 0) {
-      printf("Invalid usage.\n");
-      return 0;
-    }
-    cpu_exec((uint64_t)N);
-  }
-  return 0;
-}
+static int cmd_si(char *args);
 
 static int cmd_help(char *args);
 
@@ -105,6 +92,21 @@ static int cmd_help(char *args) {
       }
     }
     printf("Unknown command '%s'\n", arg);
+  }
+  return 0;
+}
+
+static int cmd_si(char *args) {
+  if (args == NULL) { // Default: N = 1
+    cpu_exec(1);
+  }
+  else {
+    int64_t N;
+    if (sscanf(args, "%ld", &N) != 1 || N <= 0) {
+      printf("Invalid usage.\n");
+      return 0;
+    }
+    cpu_exec((uint64_t)N);
   }
   return 0;
 }
