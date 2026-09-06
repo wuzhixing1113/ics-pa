@@ -53,6 +53,21 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args) {
+  if (args == NULL) { // Default: N = 1
+    cpu_exec(1);
+  }
+  else {
+    int64_t N;
+    if (sscanf(args, "%ld", &N) != 1 || N <= 0) {
+      printf("Invalid usage.\n");
+      return 0;
+    }
+    cpu_exec((uint64_t)N);
+  }
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -63,6 +78,7 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si}
 
   /* TODO: Add more commands */
 
