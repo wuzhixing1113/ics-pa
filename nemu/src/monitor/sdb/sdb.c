@@ -154,7 +154,7 @@ static int cmd_x(char *args) {
       }
     }
     sscanf(arg1, "%d", &len);
-    sscanf(arg2, "0x%u", &addr);
+    sscanf(arg2, "0x%x", &addr);
 
     printf("0x%x: 0x%x", addr, paddr_read(addr, len));
   }
