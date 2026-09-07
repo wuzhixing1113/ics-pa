@@ -57,6 +57,8 @@ static int cmd_si(char *args);
 
 static int cmd_help(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -65,7 +67,8 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-  { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si}
+  { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si},
+  { "info", "Show the information of registers or watchpoint", cmd_info}
 
   /* TODO: Add more commands */
 
@@ -102,10 +105,10 @@ static int cmd_si(char *args) {
   }
   else {
     uint64_t N;
-    for (int i = 0; i < strlen(args); i++) {
+    for (size_t i = 0; i < strlen(args); i++) {
       if (args[i] == ' ' || args[i] == '\0') break;
       if (!isdigit(args[i])) {
-        printf("Syntax error near %c\n", args[i == 0 ? 0 : i - 1]);
+        printf("Syntax error near %c\n", args[i ? i - 1 : 0]);
         return 0;
       }
     }
@@ -114,6 +117,18 @@ static int cmd_si(char *args) {
 
     cpu_exec(N);
   }
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  char *arg = strtok(args, " ");
+
+  if (strcmp(arg, "r") == 0) {
+    isa_reg_display();
+  }else if (strcmp(arg, "w") == 0) {
+
+  }
+
   return 0;
 }
 
