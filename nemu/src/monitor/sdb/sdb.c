@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "memory/paddr.h"
 
 static int is_batch_mode = false;
 
@@ -71,7 +72,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si},
   { "info", "Show the information of registers or watchpoint", cmd_info},
-  { "x", "", cmd_x}
+  { "x", "x /N addr - Evaluate EXPR as address, print N 4-byte words in hex", cmd_x}
+
   /* TODO: Add more commands */
 
 };
@@ -129,13 +131,33 @@ static int cmd_info(char *args) {
     isa_reg_display();
   }else if (strcmp(arg, "w") == 0) {
 
+  }else {
+    printf("Undefined info command \"%s\"\n", arg);
   }
-
   return 0;
 }
 
 static int cmd_x(char *args) {
-  //char *arg1 = strtok(NULL, " "), *arg2 = strtok;
+  char *arg1 = strtok(NULL, " "), *arg2 = strtok(NULL, " ");
+  if (arg1 == NULL || arg2 == NULL) {
+    printf("Undefined x command\n");
+    return 0;
+  } 
+  else {
+    int len;
+    paddr_t addr;
+    for (size_t i = 0; i < strlen(arg1); i++) {
+      if (arg1[i] == ' ' || arg1[i] == '\0') break;
+      if (!isdigit(arg1[i])) {
+        printf("Syntax error near %c\n", arg1[i ? i - 1 : 0]);
+        return 0;
+      }
+    }
+    sscanf(arg1, "%d", &len);
+    sscanf(arg2, "0x%u", &addr);
+
+    printf("0x%x: 0x%x", addr, paddr_read(addr, len));
+  }
   return 0;
 }
 
