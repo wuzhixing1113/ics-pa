@@ -109,7 +109,7 @@ static int cmd_si(char *args) {
   }
   else {
     uint64_t N;
-    for (size_t i = 0; i < strlen(args); i++) {
+    for (size_t i = 0; i < strlen(args); i ++) {
       if (args[i] == ' ' || args[i] == '\0') break;
       if (!isdigit(args[i])) {
         printf("Syntax error near %c\n", args[i ? i - 1 : 0]);
@@ -146,7 +146,7 @@ static int cmd_x(char *args) {
   else {
     int len;
     paddr_t addr;
-    for (size_t i = 0; i < strlen(arg1); i++) {
+    for (size_t i = 0; i < strlen(arg1); i ++) {
       if (arg1[i] == ' ' || arg1[i] == '\0') break;
       if (!isdigit(arg1[i])) {
         printf("Syntax error near %c\n", arg1[i ? i - 1 : 0]);
@@ -156,8 +156,8 @@ static int cmd_x(char *args) {
     sscanf(arg1, "%d", &len);
     sscanf(arg2, "0x%x", &addr);
 
-    for (int i = 0; i < len; i++) {
-      printf("0x%x: 0x%x\n", addr + 4*i, paddr_read(addr + 4*i, 4));
+    for (int i = 0; i < len; i ++) {
+      printf("0x%x: 0x%x\n", addr + 4 * i, paddr_read(addr + 4 * i, 4));
     }
   }
   return 0;
