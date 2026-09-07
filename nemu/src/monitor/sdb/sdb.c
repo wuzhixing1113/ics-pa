@@ -101,12 +101,17 @@ static int cmd_si(char *args) {
     cpu_exec(1);
   }
   else {
-    int64_t N;
-    if (sscanf(args, "%ld", &N) != 1 || N <= 0) {
-      printf("Invalid usage.\n");
-      return 0;
+    uint64_t N;
+    for (int i = 0; i < strlen(args); i++) {
+      if (!isdigit(args[i])) {
+        printf("Syntax error near %c", args[i == 0 ? 0 : i - 1]);
+        return 0;
+      }else if (args[i] == ' ' || args[i] == '\0') break;
     }
-    cpu_exec((uint64_t)N);
+
+    sscanf(args, "%lu", &N);
+
+    cpu_exec(N);
   }
   return 0;
 }
