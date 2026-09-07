@@ -59,6 +59,8 @@ static int cmd_help(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_x(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -68,8 +70,8 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si},
-  { "info", "Show the information of registers or watchpoint", cmd_info}
-
+  { "info", "Show the information of registers or watchpoint", cmd_info},
+  { "x", "", cmd_x}
   /* TODO: Add more commands */
 
 };
@@ -121,7 +123,7 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-  char *arg = strtok(args, " ");
+  char *arg = strtok(NULL, " ");
 
   if (strcmp(arg, "r") == 0) {
     isa_reg_display();
@@ -129,6 +131,11 @@ static int cmd_info(char *args) {
 
   }
 
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  //char *arg1 = strtok(NULL, " "), *arg2 = strtok;
   return 0;
 }
 
