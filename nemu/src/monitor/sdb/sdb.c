@@ -103,10 +103,11 @@ static int cmd_si(char *args) {
   else {
     uint64_t N;
     for (int i = 0; i < strlen(args); i++) {
+      if (args[i] == ' ' || args[i] == '\0') break;
       if (!isdigit(args[i])) {
-        printf("Syntax error near %c", args[i == 0 ? 0 : i - 1]);
+        printf("Syntax error near %c\n", args[i == 0 ? 0 : i - 1]);
         return 0;
-      }else if (args[i] == ' ' || args[i] == '\0') break;
+      }
     }
 
     sscanf(args, "%lu", &N);
