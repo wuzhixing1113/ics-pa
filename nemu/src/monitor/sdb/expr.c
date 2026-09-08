@@ -239,7 +239,6 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
       case TK_REG:
         bool flag = false;
         res = isa_reg_str2val(cur_tok.str, &flag);
-        printf("res:%d\n",res);
         if (flag) return res;
         *success = false;
         return 0;
