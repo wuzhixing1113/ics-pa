@@ -114,7 +114,7 @@ static bool make_token(char *e) {
 
         switch (rules[i].token_type) {
           case TK_NUM: case TK_HEX: case TK_REG:
-            strncpy(tokens[i].str, substr_start, substr_len);
+            strncpy(tokens[nr_token].str, substr_start, substr_len);
           case '+': case '-': case '*': case '/':
           case '(': case ')': 
           case TK_EQ: case TK_NEQ: 
@@ -207,7 +207,6 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
       case TK_NUM:
         for (int i = 0; i < strlen(cur_tok.str); i ++) {
           res = res * 10 + (cur_tok.str[i] - '0');
-          printf("here\n");
         }
         printf("res:%u\n",res);
         return res;
