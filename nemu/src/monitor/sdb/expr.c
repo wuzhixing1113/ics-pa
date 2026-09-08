@@ -239,7 +239,6 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
   }
   else {
     int pos = main_op(p, q);
-    printf("%d:%c\n", pos, tokens[pos].type);
     if (pos == -1) {
       *success = false;
       return 0;
@@ -300,7 +299,6 @@ word_t expr(char *e, bool *success) {
       tokens[i].type = TK_NEG;
   }
   bool zero = 0;
-  printf("nr_token:%d\n",nr_token);
   word_t res = calc(0, nr_token - 1, success, &zero);
 
   if (*success && !zero) return res;
