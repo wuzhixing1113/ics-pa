@@ -36,15 +36,15 @@ void isa_reg_display() {
 word_t isa_reg_str2val(const char *s, bool *success) {
   int i;
   for (i = 0; i < NR_REGS; i ++) {
+    char reg_name[NAME_LEN];
+    sprintf(reg_name, "x%d", i);
     if (i == 0) {
-      if (strcmp(s, "$zero") || strcmp(s, regs[i])) {
+      if (strcmp(s, "$zero") || strcmp(s, regs[i]) || strcmp(s + 1, reg_name)) {
         *success = true;
         return gpr(i);
       }
     }
     else {
-      char reg_name[NAME_LEN];
-      sprintf(reg_name, "x%d", i);
       if (strcmp(s + 1, regs[i]) == 0 || strcmp(s + 1, reg_name)) {
         *success = true; 
         return gpr(i);

@@ -54,9 +54,20 @@ static struct rule {
   {"0[xX][0-9a-fA-F]+", TK_HEX}, // hexadecimal numbers
   {"[0-9]+", TK_NUM},   // decimal numbers
   {"&&", TK_AND},       // and
-  {"\\$[zero]", TK_REG},       // register
+  {"\\$zero", TK_REG},       
+  {"\\$0", TK_REG},
+  {"\\$x([0-9]|[1-2][0-9]|3[0-1])", TK_REG},
+  {"\\$ra", TK_REG},             
+  {"\\$sp", TK_REG},              
+  {"\\$gp", TK_REG},              
+  {"\\$tp", TK_REG},         
+  {"\\$t[0-6]", TK_REG},
+  {"\\$s[0-9]", TK_REG},
+  {"\\$s1[0-1]", TK_REG},    
+  {"\\$a[0-7]", TK_REG},  // GPRs
+  {"\\$pc", TK_REG},    // pc          
   {"\\*", TK_DEREF},    // dereference
-  {"\\-", TK_NEG}         // negative
+  {"\\-", TK_NEG}       // negative
 };
 
 #define NR_REGEX ARRLEN(rules)
