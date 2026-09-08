@@ -39,7 +39,9 @@ word_t isa_reg_str2val(const char *s, bool *success) {
     char reg_name[NAME_LEN];
     sprintf(reg_name, "x%d", i);
     if (i == 0) {
-      if (strcmp(s, "$zero") || strcmp(s, regs[i]) || strcmp(s + 1, reg_name)) {
+      if (strcmp(s, "$zero") == 0 
+        || strcmp(s, regs[i]) == 0 
+        || strcmp(s + 1, reg_name) == 0) {
         *success = true;
         return gpr(i);
       }
