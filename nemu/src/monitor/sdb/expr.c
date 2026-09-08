@@ -241,7 +241,7 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
     }
     word_t val1 = 0, val2 = 0;
     if (binary_op(op)) val1 = calc(p, op - 1, success, zero);
-    val2 = calc(p + 1, q, success, zero);
+    val2 = calc(op + 1, q, success, zero);
     if (*success && !*zero) {
       switch (op) {
         case '+': return val1 + val2;
