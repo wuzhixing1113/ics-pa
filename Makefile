@@ -19,6 +19,6 @@ _default:
 
 submit:
 	git gc
-	STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s http://why.ink:8080/static/submit.sh)"
+	STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s https://nasa.nju.edu.cn/icspa26/submit.sh)"
 
 .PHONY: default submit
