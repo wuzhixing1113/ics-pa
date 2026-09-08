@@ -51,8 +51,8 @@ static struct rule {
   {"\\)", ')'},         // right paren
   {"==", TK_EQ},        // equal
   {"!=", TK_NEQ},       // not equal
-  {"[0-9]+", TK_NUM},   // decimal numbers
   {"0[xX][0-9a-fA-F]+", TK_HEX}, // hexadecimal numbers
+  {"[0-9]+", TK_NUM},   // decimal numbers
   {"&&", TK_AND},       // and
   {"\\$[zero]", TK_REG},       // register
   {"\\*", TK_DEREF},    // dereference
