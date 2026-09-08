@@ -20,6 +20,9 @@
  */
 #include <regex.h>
 
+#define MAX_TOKEN_LEN 128
+#define MAX_TOKENS 256
+
 enum {
   TK_NOTYPE = 256, TK_EQ,
 
