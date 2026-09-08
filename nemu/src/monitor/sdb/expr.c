@@ -237,8 +237,10 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
         }
         return res;
       case TK_REG:
-        res = isa_reg_str2val(cur_tok.str, success);
-        if (*success) return res;
+        bool flag = false;
+        res = isa_reg_str2val(cur_tok.str, &flag);
+        if (flag) return res;
+        *success = false;
         return 0;
       default:
         *success = false;
