@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include "local-include/reg.h"
+#define NAME_LEN 16
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -23,13 +24,33 @@ const char *regs[] = {
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
+#define NR_REGS ARRLEN(regs)
+
 void isa_reg_display() {
   int i;
-  for (i = 0; i < 32; i++) {
+  for (i = 0; i < NR_REGS; i ++) {
     printf("%-16s 0x%08x (%u)\n", regs[i], gpr(i), gpr(i));
   }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  int i;
+  for (i = 0; i < NR_REGS; i ++) {
+    if (i == 0) {
+      if (strcmp(s, "$zero") || strcmp(s, regs[i])) {
+        *success = true;
+        return gpr(i);
+      }
+    }
+    else {
+      char reg_name[NAME_LEN];
+      sprintf(reg_name, "x%d", i);
+      if (strcmp(s + 1, regs[i]) == 0 || strcmp(s + 1, reg_name)) {
+        *success = true; 
+        return gpr(i);
+      }
+    }
+  }
+  *success = false;
   return 0;
 }

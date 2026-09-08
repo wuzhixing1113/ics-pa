@@ -32,6 +32,7 @@ static char *code_format =
 "}";
 
 static void gen_rand_expr() {
+  int choice = rand() % 3;
   buf[0] = '\0';
 }
 

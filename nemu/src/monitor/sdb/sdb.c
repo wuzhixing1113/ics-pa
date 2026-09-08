@@ -60,6 +60,8 @@ static int cmd_help(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_p(char *args);
+
 static int cmd_x(char *args);
 
 static struct {
@@ -72,6 +74,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si},
   { "info", "Show the information of registers or watchpoint", cmd_info},
+  { "p", "Calculate the value of the expression EXPR", cmd_p},
   { "x", "x /N addr - Evaluate EXPR as address, print N 4-byte words in hex", cmd_x}
 
   /* TODO: Add more commands */
@@ -137,6 +140,15 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args) {
+  bool success = true;
+  uint32_t res = expr(args, &success);
+  
+  if(success) printf("%u\n", res);
+
+  return 0;
+}
+
 static int cmd_x(char *args) {
   char *arg1 = strtok(NULL, " "), *arg2 = strtok(NULL, " ");
   if (arg1 == NULL || arg2 == NULL) {
@@ -154,10 +166,12 @@ static int cmd_x(char *args) {
       }
     }
     sscanf(arg1, "%d", &len);
-    sscanf(arg2, "0x%x", &addr);
-
-    for (int i = 0; i < len; i ++) {
-      printf("0x%x: 0x%08x\n", addr + 4 * i, paddr_read(addr + 4 * i, 4));
+    bool success = true;
+    addr = expr(arg2, &success);
+    
+    if (success) {
+      for (int i = 0; i < len; i ++) 
+        printf("0x%x: 0x%08x\n", addr + 4 * i, paddr_read(addr + 4 * i, 4));
     }
   }
   return 0;
