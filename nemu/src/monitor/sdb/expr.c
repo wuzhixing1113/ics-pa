@@ -213,7 +213,6 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
         for (int i = 0; i < strlen(cur_tok.str); i ++) {
           res = res * 10 + (cur_tok.str[i] - '0');
         }
-        printf("res:%u\n",res);
         return res;
       case TK_HEX:
         for (int i = 0; i < strlen(cur_tok.str); i ++) {
@@ -245,7 +244,7 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
       return 0;
     }
     word_t val1 = 0, val2 = 0;
-    if (binary_op(pos)) val1 = calc(p, pos - 1, success, zero);
+    if (binary_op(tokens[pos].type)) val1 = calc(p, pos - 1, success, zero);
     val2 = calc(pos + 1, q, success, zero);
     if (*success && !*zero) {
       switch (tokens[pos].type) {
