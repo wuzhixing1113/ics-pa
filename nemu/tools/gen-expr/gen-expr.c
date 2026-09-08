@@ -22,6 +22,7 @@
 
 // this should be enough
 static char buf[65536] = {};
+static char buf1[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
@@ -35,16 +36,19 @@ static void gen_num() {
   int choice = rand() % 4;
   if (choice <= 1) {
     uint32_t num = rand() % 1000;
-    sprintf(buf + strlen(buf), "%u", num);
+    sprintf(buf + strlen(buf), "(unsigned)%u", num);
+    sprintf(buf1 + strlen(buf1), "%u", num);
   }else if (choice == 2) {
     uint32_t num = rand() % 256;
-    sprintf(buf + strlen(buf), "0x%x", num);
+    sprintf(buf + strlen(buf), "(unsigned)0x%x", num);
+    sprintf(buf1 + strlen(buf1), "0x%x", num);
   }else {
+    strcat(buf, "(unsigned)(");
     int cnt = rand() % 3;
-    for (int i = 0; i < cnt; i++) 
-      strcat(buf, "-");
+    for (int i = 0; i < cnt; i++) strcat(buf, "-"), strcat(buf1, "-");
     uint32_t num = rand() % 1000;
-    sprintf(buf + strlen(buf), "%u", num);
+    sprintf(buf + strlen(buf), "%u)", num);
+    sprintf(buf1 + strlen(buf1), "%u", num);
   }
   choice = rand() % 4;
   for (int i = 0; i < choice; i++) 
@@ -53,8 +57,9 @@ static void gen_num() {
 
 static void gen_op() {
   char *ops[] = {"+", "-", "*", "/", "==", "!=", "&&"};
-  int idx = rand() % 8;
+  int idx = rand() % 7;
   strcat(buf, ops[idx]);
+  strcat(buf1, ops[idx]);
 }
 
 static void gen_rand_expr(int d) {
@@ -68,7 +73,9 @@ static void gen_rand_expr(int d) {
     gen_num();
     break;
   case 1:
-    strcat(buf, "("); gen_rand_expr(d + 1); strcat(buf, ")");
+    strcat(buf, "("), strcat(buf1, "(");
+    gen_rand_expr(d + 1); 
+    strcat(buf, ")"), strcat(buf1, ")");
     break;
   default:
     gen_rand_expr(d + 1); gen_op(); gen_rand_expr(d + 1);
@@ -85,7 +92,7 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
-    buf[0] = '\0';
+    buf[0] = buf1[0] = '\0';
     gen_rand_expr(0);
 
     sprintf(code_buf, code_format, buf);
@@ -105,7 +112,7 @@ int main(int argc, char *argv[]) {
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
 
-    printf("%u %s\n", result, buf);
+    printf("%u %s\n", result, buf1);
   }
   return 0;
 }
