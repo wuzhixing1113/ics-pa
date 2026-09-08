@@ -175,9 +175,6 @@ static bool check_paren(int p, int q) {
 }
 
 static int main_op(int p, int q) {
-  if (q == p + 1 && unary_op(tokens[p].type)) {
-    return p;
-  }
   int i, cnt;
   cnt = 0;
   for (i = q; i >= p; i --) {
@@ -210,6 +207,7 @@ static int main_op(int p, int q) {
     if (cnt == 0 && (tokens[i].type == '*' || tokens[i].type == '/')) 
       return i; 
   }
+  if (unary_op(tokens[p].type)) return p;
   return -1;
 }
 
