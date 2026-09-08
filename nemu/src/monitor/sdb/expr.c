@@ -93,6 +93,11 @@ static bool make_token(char *e) {
   int i;
   regmatch_t pmatch;
 
+  for (i = 0; i < nr_token; i ++) {
+    memset(tokens[i].str, 0, sizeof(tokens[i].str));
+    tokens[i].type = 0;
+  }
+
   nr_token = 0;
 
   while (e[position] != '\0') {
