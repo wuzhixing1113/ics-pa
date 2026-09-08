@@ -208,8 +208,8 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
         for (int i = 0; i < strlen(cur_tok.str); i ++) {
           res = res * 10 + (cur_tok.str[i] - '0');
         }
-        return res;
         printf("res:%u\n",res);
+        return res;
       case TK_HEX:
         for (int i = 0; i < strlen(cur_tok.str); i ++) {
           if (i == 0 || i == 1) continue; // ignore "0x"
