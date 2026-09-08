@@ -207,6 +207,7 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
       case TK_NUM:
         for (int i = 0; i < strlen(cur_tok.str); i ++) {
           res = res * 10 + (cur_tok.str[i] - '0');
+          printf("here\n");
         }
         printf("res:%u\n",res);
         return res;
