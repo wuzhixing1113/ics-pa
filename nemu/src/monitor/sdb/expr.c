@@ -296,6 +296,7 @@ word_t expr(char *e, bool *success) {
       tokens[i].type = TK_NEG;
   }
   bool zero = 0;
+  printf("nr_token:%d\n",nr_token);
   word_t res = calc(0, nr_token - 1, success, &zero);
 
   if (*success && !zero) return res;
