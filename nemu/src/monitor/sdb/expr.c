@@ -234,16 +234,16 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
     return calc(p + 1, q - 1, success, zero);
   }
   else {
-    int op = main_op(p, q);
-    if (op == -1) {
+    int pos = main_op(p, q);
+    if (pos == -1) {
       *success = false;
       return 0;
     }
     word_t val1 = 0, val2 = 0;
-    if (binary_op(op)) val1 = calc(p, op - 1, success, zero);
-    val2 = calc(op + 1, q, success, zero);
+    if (binary_op(pos)) val1 = calc(p, pos - 1, success, zero);
+    val2 = calc(pos + 1, q, success, zero);
     if (*success && !*zero) {
-      switch (op) {
+      switch (tokens[pos].type) {
         case '+': return val1 + val2;
         case '-': return val1 - val2;
         case '*': return val1 * val2;
