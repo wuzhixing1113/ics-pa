@@ -305,12 +305,13 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  for (size_t i = 0; i < nr_token; i ++) {
+  for (int i = 0; i < nr_token; i ++) {
     if (tokens[i].type == '*' && !is_mul(i))
       tokens[i].type = TK_DEREF;
     if (tokens[i].type == '-' && !is_minus(i))
       tokens[i].type = TK_NEG;
   }
+
   bool zero = 0;
   word_t res = calc(0, nr_token - 1, success, &zero);
 
