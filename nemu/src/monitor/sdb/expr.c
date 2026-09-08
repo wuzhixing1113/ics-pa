@@ -120,10 +120,10 @@ static bool make_token(char *e) {
           case TK_EQ: case TK_NEQ: 
           case TK_AND: case TK_DEREF:
             tokens[nr_token].type = rules[i].token_type;
+            nr_token++;
           case TK_NOTYPE:
           default: break;
         }
-        nr_token++;
         break;
       }
     }
