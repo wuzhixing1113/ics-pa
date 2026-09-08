@@ -213,7 +213,7 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
       case TK_HEX:
         for (int i = 0; i < strlen(cur_tok.str); i ++) {
           if (i == 0 || i == 1) continue; // ignore "0x"
-          if (isdigit(cur_tok.str[i])) 
+          if (cur_tok.str[i] >= '0' && cur_tok.str[i] <= '9') 
             res = res * 16 + (cur_tok.str[i] - '0');
           else { // a-f & A-F
             char ch = tolower(cur_tok.str[i]);
