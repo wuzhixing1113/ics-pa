@@ -239,6 +239,7 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
   }
   else {
     int pos = main_op(p, q);
+    printf("%d:%c\n", pos, tokens[pos].type);
     if (pos == -1) {
       *success = false;
       return 0;
@@ -272,12 +273,14 @@ static word_t calc(int p, int q, bool *success, bool* zero) {
 }
 
 static bool __attribute__((used)) is_minus(int id) {
+  if (id <= 0) return false;
   int prev_type = tokens[id - 1].type;
   return prev_type == ')' || prev_type == TK_HEX ||
   prev_type == TK_NUM || prev_type == TK_REG;
 }
 
 static bool is_mul(int id) {
+  if (id <= 0) return false;
   int prev_type = tokens[id - 1].type;
   return prev_type == ')' || prev_type == TK_HEX ||
   prev_type == TK_NUM || prev_type == TK_REG;
@@ -291,12 +294,9 @@ word_t expr(char *e, bool *success) {
   }
 
   for (size_t i = 0; i < nr_token; i ++) {
-    bool flag = (i == 0 || !is_mul(i));
-    if (tokens[i].type == '*' && flag)
+    if (tokens[i].type == '*' && !is_mul(i))
       tokens[i].type = TK_DEREF;
-    
-    flag = (i == 0 || !is_minus(i));
-    if (tokens[i].type == '-' && flag)
+    if (tokens[i].type == '-' && !is_minus(i))
       tokens[i].type = TK_NEG;
   }
   bool zero = 0;
