@@ -21,8 +21,8 @@ typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
 
-  char *expr[128];
-  int val;
+  char expr[1024];
+  word_t val;
   /* TODO: Add more members if necessary */
 
 } WP;
@@ -51,11 +51,11 @@ WP* new_wp() {
   return wp;
 }
 
-void free_wp(WP *wp) {
+void free_wp(int wp_NO) {
   if (head == NULL) return;
 
   WP *cur = head, *prev = NULL;
-  while (cur != wp) {
+  while (cur && cur->NO != wp_NO) {
     prev = cur, cur = cur->next;
   }
 
@@ -66,7 +66,44 @@ void free_wp(WP *wp) {
 
   cur->next = free_, free_ = cur;
 
-  cur->expr[0] = '\0', cur->val = 0;
+  memset(cur->expr, 0, sizeof(cur->expr)), cur->val = 0;
+}
+
+// Check all the watchpoints
+bool check_all_wp() { 
+  if (head == NULL) return 0;
+
+  WP *cur = head;
+  bool change = 0;
+
+  while (cur != NULL) {
+    bool success = 1; 
+    word_t new_val;
+    if (cur->val != (new_val = expr(cur->expr, &success)) ) {
+      change = 1;
+      printf("Watchpoint %d: %s\n", cur->NO, cur->expr);
+      printf("Old value: 0x%x\n", cur->val);
+      printf("New value: 0x%x\n", new_val);
+      cur->val = new_val;
+    }
+    cur = cur->next;
+  }
+
+  return change;
+}
+
+void display_used_wp() {
+  if (head == NULL) {
+    printf("No watchpoints\n");
+    return;
+  }
+  printf("%-10sWhat\n", "Num");
+  WP *cur = head;
+
+  while (cur != NULL) {
+    printf("%-10d%s\n", cur->NO, cur->expr);
+    cur = cur->next;
+  }
 }
 
 /* TODO: Implement the functionality of watchpoint */
