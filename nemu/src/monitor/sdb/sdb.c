@@ -163,7 +163,6 @@ static int cmd_w(char *args) {
 
   WP *NEW_wp = new_wp();
   strcpy(NEW_wp->expr, args);
-  printf("%s\n", NEW_wp->expr);
   NEW_wp->val = val;
   printf("Watchpoint %d: %s\n", NEW_wp->NO, NEW_wp->expr);
   return 0;
