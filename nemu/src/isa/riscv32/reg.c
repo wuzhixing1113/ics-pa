@@ -35,6 +35,9 @@ void isa_reg_display() {
 
 word_t isa_reg_str2val(const char *s, bool *success) {
   int i;
+  // pc
+  if (strcmp(s, "$pc") == 0) return cpu.pc;
+
   for (i = 0; i < NR_REGS; i ++) {
     char reg_name[NAME_LEN];
     sprintf(reg_name, "x%d", i);
