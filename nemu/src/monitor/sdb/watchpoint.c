@@ -101,7 +101,7 @@ void display_used_wp() {
   WP *cur = head;
 
   while (cur != NULL) {
-    printf("%-10d%s\n", cur->NO, cur->expr);
+    printf("%d%s\n", cur->NO, cur->expr);
     cur = cur->next;
   }
 }
