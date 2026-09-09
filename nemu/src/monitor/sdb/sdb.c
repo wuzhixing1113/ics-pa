@@ -64,6 +64,8 @@ static int cmd_p(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_w(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -75,6 +77,7 @@ static struct {
   { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si},
   { "info", "Show the information of registers or watchpoint", cmd_info},
   { "p", "Calculate the value of the expression EXPR", cmd_p},
+  { "w", "Stop execution when the value of EXPR changes", cmd_w},
   { "x", "x /N addr - Evaluate EXPR as address, print N 4-byte words in hex", cmd_x}
 
   /* TODO: Add more commands */
@@ -146,6 +149,11 @@ static int cmd_p(char *args) {
   
   if(success) printf("%u\n", res);
 
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  
   return 0;
 }
 
