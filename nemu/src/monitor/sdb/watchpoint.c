@@ -83,7 +83,7 @@ bool check_all_wp() {
   return change;
 }
 
-void display_used_wp() {
+void used_wp_display() {
   if (head == NULL) {
     printf("No watchpoints\n");
     return;
