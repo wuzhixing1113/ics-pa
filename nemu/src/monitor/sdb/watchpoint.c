@@ -65,10 +65,10 @@ bool check_all_wp() {
   if (head == NULL) return 0;
 
   WP *cur = head;
-  bool change = 0;
+  bool change = false;
 
   while (cur != NULL) {
-    bool success = 1; 
+    bool success = true; 
     word_t new_val;
     if (cur->val != (new_val = expr(cur->expr, &success)) ) {
       change = 1;
