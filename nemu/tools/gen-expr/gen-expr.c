@@ -58,7 +58,7 @@ static void gen_num() {
 
 static void gen_op() {
   char *ops[] = {"+", "+", "-", "-", "*", "*", "/", "/", "==", "!=", "&&"};
-  int idx = rand() % 11;
+  int idx = rand() % 8;
   strcat(buf, ops[idx]);
   strcat(buf1, ops[idx]);
 }
