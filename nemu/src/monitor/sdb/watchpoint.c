@@ -14,7 +14,9 @@
 ***************************************************************************************/
 
 #include "sdb.h"
+#ifdef CONFIG_WATCHPOINT
 #include <config/watchpoint.h>
+#endif
 
 #define NR_WP 32
 
