@@ -137,6 +137,11 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   char *arg = strtok(NULL, " ");
 
+  if(arg == NULL) {
+    printf("Invalid usage of info\n");
+    return 0;
+  }
+
   if (strcmp(arg, "r") == 0) {
     isa_reg_display();
   }else if (strcmp(arg, "w") == 0) {
