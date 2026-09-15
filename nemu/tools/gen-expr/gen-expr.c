@@ -43,12 +43,12 @@ static void gen_num() {
     sprintf(buf + strlen(buf), "(unsigned)0x%x ", num);
     sprintf(buf1 + strlen(buf1), "0x%x ", num); 
   }else {
-    strcat(buf, "(unsigned)("); 
+    strcat(buf, "(unsigned)("), strcat(buf1, "("); 
     int cnt = rand() % 3;
     for (int i = 0; i < cnt; i++) strcat(buf, "-("), strcat(buf1, "-(");
     uint32_t num = rand() % 1000;
     sprintf(buf + strlen(buf), "%u)", num);
-    sprintf(buf1 + strlen(buf1), "%u", num);
+    sprintf(buf1 + strlen(buf1), "%u)", num);
     for (int i = 0; i < cnt; i++) strcat(buf, ")"), strcat(buf1, ")");
   }
   choice = rand() % 4;
