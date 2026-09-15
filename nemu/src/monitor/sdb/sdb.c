@@ -17,9 +17,7 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#ifdef CONFIG_WATCHPOINT
-#include <config/watchpoint.h>
-#endif
+#include <monitor/sdb/watchpoint.h>
 #include "sdb.h"
 #include "memory/paddr.h"
 
