@@ -341,7 +341,7 @@ void test_expr(const char *filename) {
         expr_str[strcspn(expr_str, "\n")] = '\0';
 
         uint32_t expected = strtoul(line, NULL, 10);
-        bool success = false;
+        bool success = true;
         word_t result = expr(expr_str, &success);
 
         if (success && result == expected) {
