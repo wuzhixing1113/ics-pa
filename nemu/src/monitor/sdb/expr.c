@@ -300,6 +300,7 @@ static bool is_mul(int id) {
 
 word_t expr(char *e, bool *success) {
   if (e == NULL) {
+    *success = false;
     printf("Invalid expression\n");
     return 0;
   }
