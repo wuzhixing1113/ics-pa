@@ -162,6 +162,10 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_w(char *args) {
+  if(args == NULL) {
+    printf("Invalid usage of watchpoint setup\n");
+    return 0;
+  }
   bool success = true;
   word_t val = expr(args, &success);
   if(!success) return 0;
@@ -202,6 +206,11 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_d(char *args) {
+  if(args == NULL) {
+    printf("Invalid usage of watchpoint deletion\n");
+    return 0;
+  }
+
   int wp_NO, i;
   for (i = 0; i < strlen(args); i ++) {
     if (args[i] == ' ' || args[i] == '\0') break;
