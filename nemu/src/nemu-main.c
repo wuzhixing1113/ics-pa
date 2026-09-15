@@ -15,6 +15,7 @@
 
 #include <common.h>
 
+void init_regex();
 void test_expr(const char* filename);
 void init_monitor(int, char *[]);
 void am_init_monitor();
@@ -30,6 +31,7 @@ int main(int argc, char *argv[]) {
 #endif
   
   if (1) {
+    init_regex();
     test_expr("tools/gen-expr/build/input");
     return 0;
   }
