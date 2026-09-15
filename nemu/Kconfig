@@ -151,6 +151,12 @@ config ITRACE_COND
   string "Only trace instructions when the condition is true"
   default "true"
 
+config WATCHPOINT
+  bool "Enable watchpoint support"
+  default y
+  help
+    Enable watchpoint support in the monitor.
+    This allows you to set watchpoints with the 'w' command.
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

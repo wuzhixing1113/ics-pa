@@ -17,6 +17,7 @@
 #include <cpu/cpu.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <config/watchpoint.h>
 #include "sdb.h"
 #include "memory/paddr.h"
 
@@ -24,6 +25,7 @@ static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+WP* new_wp();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -60,7 +62,13 @@ static int cmd_help(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_p(char *args);
+
 static int cmd_x(char *args);
+
+static int cmd_w(char *args);
+
+static int cmd_d(char *args);
 
 static struct {
   const char *name;
@@ -72,8 +80,10 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "Single-step N instructions, then pause. Default N = 1", cmd_si},
   { "info", "Show the information of registers or watchpoint", cmd_info},
-  { "x", "x /N addr - Evaluate EXPR as address, print N 4-byte words in hex", cmd_x}
-
+  { "p", "Calculate the value of the expression EXPR", cmd_p},
+  { "w", "Stop execution when the value of EXPR changes", cmd_w},
+  { "x", "Evaluate EXPR as address, print N 4-byte words in hex", cmd_x},
+  { "d", "Delete the corresponding watchpoint", cmd_d}
   /* TODO: Add more commands */
 
 };
@@ -130,10 +140,31 @@ static int cmd_info(char *args) {
   if (strcmp(arg, "r") == 0) {
     isa_reg_display();
   }else if (strcmp(arg, "w") == 0) {
-
+    used_wp_display();
   }else {
     printf("Undefined info command \"%s\"\n", arg);
   }
+  return 0;
+}
+
+static int cmd_p(char *args) {
+  bool success = true;
+  uint32_t res = expr(args, &success);
+  
+  if(success) printf("%u\n", res);
+
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  bool success = true;
+  word_t val = expr(args, &success);
+  if(!success) return 0;
+
+  WP *NEW_wp = new_wp();
+  strcpy(NEW_wp->expr, args);
+  NEW_wp->val = val;
+  printf("Watchpoint %d: %s\n", NEW_wp->NO, NEW_wp->expr);
   return 0;
 }
 
@@ -154,12 +185,28 @@ static int cmd_x(char *args) {
       }
     }
     sscanf(arg1, "%d", &len);
-    sscanf(arg2, "0x%x", &addr);
-
-    for (int i = 0; i < len; i ++) {
-      printf("0x%x: 0x%08x\n", addr + 4 * i, paddr_read(addr + 4 * i, 4));
+    bool success = true;
+    addr = expr(arg2, &success);
+    
+    if (success) {
+      for (int i = 0; i < len; i ++) 
+        printf("0x%x: 0x%08x\n", addr + 4 * i, paddr_read(addr + 4 * i, 4));
     }
   }
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  int wp_NO, i;
+  for (i = 0; i < strlen(args); i ++) {
+    if (args[i] == ' ' || args[i] == '\0') break;
+    if (!isdigit(args[i])) {
+      printf("Invalid usage\n");
+      return 0;
+    }
+  }
+  sscanf(args, "%d", &wp_NO);
+  free_wp(wp_NO);
   return 0;
 }
 

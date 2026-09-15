@@ -22,6 +22,7 @@
 
 // this should be enough
 static char buf[65536] = {};
+static char buf1[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
@@ -31,8 +32,56 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+static void gen_num() {
+  int choice = rand() % 4;
+  if (choice <= 1) {
+    uint32_t num = rand() % 1000;
+    sprintf(buf + strlen(buf), "(unsigned)%u", num);
+    sprintf(buf1 + strlen(buf1), "%u", num);
+  }else if (choice == 2) {
+    uint32_t num = rand() % 256;
+    sprintf(buf + strlen(buf), "(unsigned)0x%x ", num);
+    sprintf(buf1 + strlen(buf1), "0x%x ", num); 
+  }else {
+    strcat(buf, "(unsigned)("), strcat(buf1, "("); 
+    int cnt = rand() % 3;
+    for (int i = 0; i < cnt; i++) strcat(buf, "-("), strcat(buf1, "-(");
+    uint32_t num = rand() % 1000;
+    sprintf(buf + strlen(buf), "%u)", num);
+    sprintf(buf1 + strlen(buf1), "%u)", num);
+    for (int i = 0; i < cnt; i++) strcat(buf, ")"), strcat(buf1, ")");
+  }
+  choice = rand() % 4;
+  for (int i = 0; i < choice; i++) 
+    strcat(buf, " ");
+}
+
+static void gen_op() {
+  char *ops[] = {"+", "+", "-", "-", "*", "*", "/", "/", "==", "!=", "&&"};
+  int idx = rand() % 8;
+  strcat(buf, ops[idx]);
+  strcat(buf1, ops[idx]);
+}
+
+static void gen_rand_expr(int d) {
+  if (d >= 15) {
+    gen_num();
+    return;
+  }
+  int choice = rand() % 3;
+  switch (choice) {
+  case 0:
+    gen_num();
+    break;
+  case 1:
+    strcat(buf, "("), strcat(buf1, "(");
+    gen_rand_expr(d + 1); 
+    strcat(buf, ")"), strcat(buf1, ")");
+    break;
+  default:
+    gen_rand_expr(d + 1); gen_op(); gen_rand_expr(d + 1);
+    break;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -44,7 +93,8 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
+    buf[0] = buf1[0] = '\0';
+    gen_rand_expr(0);
 
     sprintf(code_buf, code_format, buf);
 
@@ -53,7 +103,7 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    int ret = system("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr");
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");
@@ -63,7 +113,7 @@ int main(int argc, char *argv[]) {
     ret = fscanf(fp, "%d", &result);
     pclose(fp);
 
-    printf("%u %s\n", result, buf);
+    printf("%u %s\n", result, buf1);
   }
   return 0;
 }

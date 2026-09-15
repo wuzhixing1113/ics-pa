@@ -14,16 +14,9 @@
 ***************************************************************************************/
 
 #include "sdb.h"
+#include <config/watchpoint.h>
 
 #define NR_WP 32
-
-typedef struct watchpoint {
-  int NO;
-  struct watchpoint *next;
-
-  /* TODO: Add more members if necessary */
-
-} WP;
 
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
@@ -37,6 +30,71 @@ void init_wp_pool() {
 
   head = NULL;
   free_ = wp_pool;
+}
+
+WP* new_wp() {
+  if (!free_) printf("No free watchpoints\n"), assert(0);
+  
+  WP *wp = free_;
+  free_ = free_->next;
+  wp->next = head, head = wp;
+
+  return wp;
+}
+
+void free_wp(int wp_NO) {
+  if (head == NULL) return;
+
+  WP *cur = head, *prev = NULL;
+  while (cur && cur->NO != wp_NO) {
+    prev = cur, cur = cur->next;
+  }
+
+  if (cur == NULL) return;
+
+  if (prev) prev->next = cur->next;
+  else head = cur->next;
+
+  cur->next = free_, free_ = cur;
+
+  memset(cur->expr, 0, sizeof(cur->expr)), cur->val = 0;
+}
+
+// Check all the watchpoints
+bool check_all_wp() { 
+  if (head == NULL) return 0;
+
+  WP *cur = head;
+  bool change = false;
+
+  while (cur != NULL) {
+    bool success = true; 
+    word_t new_val;
+    if (cur->val != (new_val = expr(cur->expr, &success)) ) {
+      change = 1;
+      printf("Watchpoint %d: %s\n", cur->NO, cur->expr);
+      printf("Old value: 0x%x\n", cur->val);
+      printf("New value: 0x%x\n", new_val);
+      cur->val = new_val;
+    }
+    cur = cur->next;
+  }
+
+  return change;
+}
+
+void used_wp_display() {
+  if (head == NULL) {
+    printf("No watchpoints\n");
+    return;
+  }
+  printf("%-10sWhat\n", "Num");
+  WP *cur = head;
+
+  while (cur != NULL) {
+    printf("%-10d%s\n", cur->NO, cur->expr);
+    cur = cur->next;
+  }
 }
 
 /* TODO: Implement the functionality of watchpoint */
