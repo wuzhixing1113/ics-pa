@@ -40,15 +40,16 @@ static void gen_num() {
     sprintf(buf1 + strlen(buf1), "%u", num);
   }else if (choice == 2) {
     uint32_t num = rand() % 256;
-    sprintf(buf + strlen(buf), "(unsigned)0x%x", num);
-    sprintf(buf1 + strlen(buf1), "0x%x", num);
+    sprintf(buf + strlen(buf), "(unsigned)0x%x ", num);
+    sprintf(buf1 + strlen(buf1), "0x%x ", num); 
   }else {
-    strcat(buf, "(unsigned)(");
+    strcat(buf, "(unsigned)("); 
     int cnt = rand() % 3;
-    for (int i = 0; i < cnt; i++) strcat(buf, "-"), strcat(buf1, "-");
+    for (int i = 0; i < cnt; i++) strcat(buf, "-("), strcat(buf1, "-(");
     uint32_t num = rand() % 1000;
     sprintf(buf + strlen(buf), "%u)", num);
     sprintf(buf1 + strlen(buf1), "%u", num);
+    for (int i = 0; i < cnt; i++) strcat(buf, ")"), strcat(buf1, ")");
   }
   choice = rand() % 4;
   for (int i = 0; i < choice; i++) 
@@ -56,14 +57,14 @@ static void gen_num() {
 }
 
 static void gen_op() {
-  char *ops[] = {"+", "-", "*", "/", "==", "!=", "&&"};
-  int idx = rand() % 7;
+  char *ops[] = {"+", "+", "-", "-", "*", "*", "/", "/", "==", "!=", "&&"};
+  int idx = rand() % 11;
   strcat(buf, ops[idx]);
   strcat(buf1, ops[idx]);
 }
 
 static void gen_rand_expr(int d) {
-  if (d >= 5) {
+  if (d >= 15) {
     gen_num();
     return;
   }

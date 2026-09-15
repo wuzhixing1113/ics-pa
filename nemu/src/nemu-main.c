@@ -27,10 +27,11 @@ int main(int argc, char *argv[]) {
 #else
   init_monitor(argc, argv);
 #endif
-
+  
+  
   /* Start engine. */
   engine_start();
-
+  
   // printf("NEMU_STATE: %d\n", nemu_state.state);
   return is_exit_status_bad();
 }
