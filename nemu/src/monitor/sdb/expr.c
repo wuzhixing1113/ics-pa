@@ -299,6 +299,11 @@ static bool is_mul(int id) {
 }
 
 word_t expr(char *e, bool *success) {
+  if (e == NULL) {
+    printf("Invalid expression\n");
+    return 0;
+  }
+
   if (!make_token(e)) {
     *success = false;
     printf("Invalid expression\n");
