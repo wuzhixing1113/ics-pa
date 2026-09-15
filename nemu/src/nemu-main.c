@@ -15,6 +15,7 @@
 
 #include <common.h>
 
+void test_expr(const char* filename);
 void init_monitor(int, char *[]);
 void am_init_monitor();
 void engine_start();
@@ -28,7 +29,10 @@ int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
 #endif
   
-  
+  if (1) {
+    test_expr("tools/gen-expr/build/input");
+    return 0;
+  }
   
   /* Start engine. */
   engine_start();

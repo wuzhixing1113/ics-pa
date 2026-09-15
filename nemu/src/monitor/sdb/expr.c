@@ -320,3 +320,39 @@ word_t expr(char *e, bool *success) {
   else printf("Invalid expression\n");
   return 0;
 }
+
+void test_expr(const char *filename) {
+    FILE *fp = fopen(filename, "r");
+    if (fp == NULL) {
+        printf("Cannot open %s\n", filename);
+        return;
+    }
+
+    char line[65536];
+    int line_no = 0, pass = 0, fail = 0;
+
+    while (fgets(line, sizeof(line), fp)) {
+        line_no++;
+        char *space = strchr(line, ' ');
+        if (space == NULL) continue;
+
+        *space = '\0';
+        char *expr_str = space + 1;
+        expr_str[strcspn(expr_str, "\n")] = '\0';
+
+        uint32_t expected = strtoul(line, NULL, 10);
+        bool success = false;
+        word_t result = expr(expr_str, &success);
+
+        if (success && result == expected) {
+            pass++;
+        } else {
+            fail++;
+            printf("FAIL line %d: %s => expected %u, got %u\n",
+                   line_no, expr_str, expected, result);
+        }
+    }
+
+    printf("===== Pass: %d, Fail: %d =====\n", pass, fail);
+    fclose(fp);
+}
