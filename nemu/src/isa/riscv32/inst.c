@@ -33,8 +33,12 @@ enum {
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { \
-   *imm = (SEXT(BITS(i, 31, 31), 1) << 20) | (BITS(i, 19, 12) << 12) \
-   | (BITS(i, 20, 20) << 11) | (BITS(i, 30, 21) << 1); \
+  *imm = (SEXT(BITS(i, 31, 31), 1) << 20) | (BITS(i, 19, 12) << 12) \
+  | (BITS(i, 20, 20) << 11) | (BITS(i, 30, 21) << 1); \
+} while (0)
+#define immB() do { \
+  *imm = (SEXT(BITS(i, 31, 31), 1) << 12) | (BITS(i, 7, 7) << 11) \
+  | (BITS(i, 30, 25) << 5) | (BITS(i, 11, 8) << 1); \
 } while (0)
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
@@ -47,6 +51,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_U:                   immU(); break;
     case TYPE_S: src1R(); src2R(); immS(); break;
     case TYPE_J:                   immJ(); break;
+    case TYPE_B: src1R(); src2R(); immB(); break;
     case TYPE_N: break;
     default: panic("unsupported type = %d", type);
   }
@@ -67,8 +72,13 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(rd) = imm);
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(rd) = s->pc + imm);
 
-  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->pc + 4, s->dnpc = s->pc + imm);
-  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(rd) = s->pc + 4, s->dnpc = (src1 + imm) & (~1));
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, 
+    R(rd) = s->pc + 4, s->dnpc = s->pc + imm);
+  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, 
+    R(rd) = s->pc + 4, s->dnpc = (src1 + imm) & (~1));
+
+  INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge    , B, 
+    s->dnpc = ((signed)src1 > (signed)src2 ? s->pc + imm : s->pc + 4));
   
   // INSTPAT("??????? ????? ????? 000 ????? 00000 11", lb     , I, R(rd) = 1);
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, R(rd) = Mr(src1 + imm, 4));
