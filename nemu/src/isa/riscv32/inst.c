@@ -106,6 +106,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 010 ????? 01100 11", mulhsu , R, 
     R(rd) = (uint64_t)((int64_t)src1 * (uint64_t)src2) >> 32);
   INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu   , R, R(rd) = src1 / src2);
+  INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem    , R, R(rd) = src1 % src2);
 
   // INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, 1);
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
