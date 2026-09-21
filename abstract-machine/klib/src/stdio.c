@@ -27,6 +27,7 @@ int sprintf(char *out, const char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
   for (j = 0; j < fmt_len; j ++) {
+    if (fmt[j] == '%') continue;
     if (j == 0 || fmt[j - 1] != '%') out[i ++] = fmt[j];
     else if (fmt[j - 1] == '%') {
       if (fmt[j] == 'd') {
