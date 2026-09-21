@@ -23,6 +23,7 @@ char *int_to_str(int x, char *s) {
 
 int sprintf(char *out, const char *fmt, ...) {
   // panic("Not implemented");
+  out[0] = '\0';
   size_t i = 0, j, fmt_len = strlen(fmt);
   va_list args;
   va_start(args, fmt);
@@ -44,9 +45,9 @@ int sprintf(char *out, const char *fmt, ...) {
       }
       else return -1;
     }
+    out[i] = '\0';
   }
   va_end(args);
-  out[i] = '\0';
   return i;
 }
 
