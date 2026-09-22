@@ -5,20 +5,20 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-int printf(const char *fmt, ...) {
-  panic("Not implemented");
-}
-
-int vsprintf(char *out, const char *fmt, va_list ap) {
-  panic("Not implemented");
-}
-
 char *int_to_str(int x, char *s) {
   if (x < 0) *s++ = '-', x = -x;
   if (x > 9) s = int_to_str(x / 10, s);
   *s++ = (x % 10) + '0';
   *s = '\0';
   return s;
+}
+
+int printf(const char *fmt, ...) {
+  panic("Not implemented");
+}
+
+int vsprintf(char *out, const char *fmt, va_list ap) {
+  panic("Not implemented");
 }
 
 int sprintf(char *out, const char *fmt, ...) {
