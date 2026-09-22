@@ -44,7 +44,7 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
-  // panic("Not implemented");
+  panic("Not implemented");
   size_t i, len1 = strlen(s1), len2 = strlen(s2);
   size_t max_len = len1 <= len2 ? len2 : len1;
   for (i = 0; i < max_len; i ++) {
