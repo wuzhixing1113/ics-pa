@@ -43,7 +43,6 @@ int sprintf(char *out, const char *fmt, ...) {
         strcat(out, s);
         i += strlen(s);
       }
-      else return -1;
     }
     out[i] = '\0';
   }
