@@ -20,6 +20,7 @@
 #define NR_REG 32
 
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
+  printf("I'm HERE\n");
   int i;
   for (i = 0; i < NR_REG; i ++) {
     if (ref_r->gpr[i] != gpr(i)) {
