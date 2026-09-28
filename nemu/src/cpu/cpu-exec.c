@@ -42,7 +42,7 @@ static void iringbuf_write(const char* log) {
   ringbuf_idx = (ringbuf_idx + 1) % MAX_INST_TO_PRINT;
 }
 
-static void iringbuf_read() {
+static void iringbuf_print() {
   printf("Recent several instructions:\n");
   for (int i = 0; i < MAX_INST_TO_PRINT; i ++) {
     int k = (ringbuf_idx + i) % MAX_INST_TO_PRINT;
@@ -128,7 +128,7 @@ static void statistic() {
 void assert_fail_msg() {
   isa_reg_display();
 #ifdef CONFIG_ITRACE
-  iringbuf_read();
+  iringbuf_print();
 #endif
   statistic();
 }
