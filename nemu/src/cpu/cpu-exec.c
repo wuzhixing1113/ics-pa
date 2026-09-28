@@ -60,7 +60,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
-
+printf("I'm here\n%s\n", _this->logbuf);
 #ifdef CONFIG_ITRACE
   iringbuf_write(_this->logbuf);
 #endif
