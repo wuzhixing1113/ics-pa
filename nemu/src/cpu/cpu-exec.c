@@ -50,7 +50,7 @@ void iringbuf_read() {
       if (i == MAX_INST_TO_PRINT - 1) {
         printf("--> %s\n", ringbuf[k]);
       }
-      else printf("   %s\n", ringbuf[k]);
+      else printf("    %s\n", ringbuf[k]);
     }
   }
 }
