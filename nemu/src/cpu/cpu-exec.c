@@ -48,9 +48,9 @@ void iringbuf_read() {
     int k = (ringbuf_idx + i) % MAX_INST_TO_PRINT;
     if (ringbuf[k][0] != '\0') {
       if (i == MAX_INST_TO_PRINT - 1) {
-        printf("%s <-- here\n", ringbuf[k]);
+        printf("--> %s\n", ringbuf[k]);
       }
-      else printf("%s\n", ringbuf[k]);
+      else printf("   %s\n", ringbuf[k]);
     }
   }
 }
