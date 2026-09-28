@@ -36,13 +36,13 @@ void device_update();
 static char ringbuf[MAX_INST_TO_PRINT][256];
 static int  ringbuf_idx = 0;
 
-void iringbuf_write(const char* log) {
+static void iringbuf_write(const char* log) {
   strncpy(ringbuf[ringbuf_idx], log, 255);
   ringbuf[ringbuf_idx][255] = '\0';
   ringbuf_idx = (ringbuf_idx + 1) % MAX_INST_TO_PRINT;
 }
 
-void iringbuf_read() {
+static void iringbuf_read() {
   printf("Recent several instructions:\n");
   for (int i = 0; i < MAX_INST_TO_PRINT; i ++) {
     int k = (ringbuf_idx + i) % MAX_INST_TO_PRINT;
