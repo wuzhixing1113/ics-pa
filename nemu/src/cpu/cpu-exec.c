@@ -33,11 +33,38 @@ static bool g_print_step = false;
 
 void device_update();
 
+static char ringbuf[MAX_INST_TO_PRINT][256];
+static int ringbuf_idx = 0;
+
+void iringbuf_write(const char* log) {
+  strncpy(ringbuf[ringbuf_idx], log, 255);
+  ringbuf[ringbuf_idx][255] = '\0';
+  ringbuf_idx = (ringbuf_idx + 1) % MAX_INST_TO_PRINT;
+}
+
+void iringbuf_read() {
+  printf("Recent several instructions:\n");
+  for (int i = 0; i < MAX_INST_TO_PRINT; i ++) {
+    int k = (ringbuf_idx + i) % MAX_INST_TO_PRINT;
+    if (ringbuf[k][0] != '\0') {
+      if (i == MAX_INST_TO_PRINT - 1) {
+        printf("--->%s\n", ringbuf[k]);
+      }
+      else printf("\t%s\n", ringbuf[k]);
+    }
+  }
+}
+
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+
+#ifdef CONFIG_ITRACE
+  iringbuf_write(_this->logbuf);
+#endif
+
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
 #ifdef CONFIG_WATCHPOINT
@@ -47,8 +74,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   }
 #endif
 }
-
-//static 
 
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
@@ -78,8 +103,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
-  
-  
 #endif
 }
 
@@ -105,6 +128,9 @@ static void statistic() {
 
 void assert_fail_msg() {
   isa_reg_display();
+#ifdef CONFIG_ITRACE
+  iringbuf_read();
+#endif
   statistic();
 }
 
