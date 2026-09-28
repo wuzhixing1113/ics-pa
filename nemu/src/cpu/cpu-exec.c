@@ -34,7 +34,7 @@ static bool g_print_step = false;
 void device_update();
 
 static char ringbuf[MAX_INST_TO_PRINT][256];
-static int ringbuf_idx = 0;
+static int  ringbuf_idx = 0;
 
 void iringbuf_write(const char* log) {
   strncpy(ringbuf[ringbuf_idx], log, 255);
