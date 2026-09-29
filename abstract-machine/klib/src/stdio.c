@@ -24,7 +24,7 @@ int printf(const char *fmt, ...) {
   va_end(args);
 
   if (ret > 0) {
-    for (char *p = tmp; *p; p ++) putch(*p);
+    for (const char *p = tmp; *p; p ++) putch(*p);
   }
 
   return ret;
