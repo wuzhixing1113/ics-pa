@@ -17,6 +17,7 @@ char *int_to_str(int x, char *s) {
 
 int printf(const char *fmt, ...) {
   char tmp[MAX_READ_LEN];
+  tmp[0] = '\0';
   va_list args;
   va_start(args, fmt);
   int ret = sprintf(tmp, fmt, args);
