@@ -7,9 +7,8 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-char *int_to_str(int x, char *s) {
-  if (x < 0) *s++ = '-', x = -x;
-  if (x > 9) s = int_to_str(x / 10, s);
+char *uint_to_str(int x, char *s) {
+  if (x > 9) s = uint_to_str(x / 10, s);
   *s++ = (x % 10) + '0';
   *s = '\0';
   return s;
@@ -33,33 +32,46 @@ int printf(const char *fmt, ...) {
 int vsprintf(char *out, const char *fmt, va_list ap) {
   // panic("Not implemented");
   size_t i = 0, j, fmt_len = strlen(fmt);
-  for (j = 0; j < fmt_len; j ++) {
-    if (fmt[j] == '%') continue;
-    if (j == 0 || fmt[j - 1] != '%') out[i ++] = fmt[j];
-    else if (fmt[j - 1] == '%') {
+  for (j = 0; j < fmt_len; ) {
+    if (fmt[j] == '%') {
+      j ++; int len = 1, width = 0;
+      while (fmt[j] >= '0' && fmt[j] <= '9') {
+        len++, j++;
+        width = width * 10 + (fmt[j] - '0');
+      }
       switch (fmt[j]) {
       case 'd': { // int
-        int tmp = va_arg(ap, int);
-        char str[32] = "";
-        int_to_str(tmp, str);
+        int t = va_arg(ap, int);
+        char str[64] = "";
+        uint_to_str(t > 0 ? t : -t, str);
+        if(t < 0) out[i ++] = '-';
+        while (width > strlen(str) + (t < 0 ? 1 : 0)) out[i ++] = '0', width--;
+        out[i] = '\0';
         strcat(out, str);
         i += strlen(str);
         break;
       }
       case 's': { // string
         char *s = va_arg(ap, char *);
+        while (width > strlen(s)) out[i ++] = ' ', width--;
+        out[i] = '\0';
         strcat(out, s);
         i += strlen(s);
         break;
       }
       case 'c': { // character
+        while (--width) out[i ++] = ' ';
         out[i ++] = (unsigned char)va_arg(ap, int);
         break;
       }
-      default:
+      default: {
+        for (int k = 1; k <= len; k ++) out[i ++] = fmt[j - len + k];
         break;
       }
+      }
+      j ++;
     }
+    else out[i ++] = fmt[j ++];
     out[i] = '\0';
   }
   return i;
