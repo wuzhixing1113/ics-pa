@@ -60,6 +60,11 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+
+#ifdef CONFIG_ITRACE
+  iringbuf_write(_this->logbuf);
+#endif
+
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
 #ifdef CONFIG_WATCHPOINT
@@ -78,7 +83,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
-  assert(s->pc == s->snpc);
   int ilen = s->snpc - s->pc;
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst;
@@ -99,8 +103,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
-
-  iringbuf_write(s->logbuf);
 #endif
 }
 
