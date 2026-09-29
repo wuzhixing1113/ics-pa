@@ -47,10 +47,8 @@ static void iringbuf_print() {
   printf("Recent several instructions:\n");
   for (int i = 0; i < MAX_INST_TO_PRINT; i ++) {
     int k = (ringbuf_idx + i) % MAX_INST_TO_PRINT;
-    if (ringbuf[k][0] != '\0') {
-      if (i == MAX_INST_TO_PRINT - 1) printf("----->  %s\n", ringbuf[k]);
-      else printf("        %s\n", ringbuf[k]);
-    }
+    if (ringbuf[k][0] != '\0') 
+      printf("        %s\n", ringbuf[k]);
   }
 }
 #endif
