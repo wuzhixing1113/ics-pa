@@ -33,6 +33,7 @@ static bool g_print_step = false;
 
 void device_update();
 
+#ifdef CONFIG_ITRACE
 static char ringbuf[MAX_INST_TO_PRINT][256];
 static int  ringbuf_idx = 0;
 
@@ -52,6 +53,7 @@ static void iringbuf_print() {
     }
   }
 }
+#endif
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
