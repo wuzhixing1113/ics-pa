@@ -20,7 +20,7 @@ int printf(const char *fmt, ...) {
   tmp[0] = '\0';
   va_list args;
   va_start(args, fmt);
-  int ret = sprintf(tmp, fmt, args);
+  int ret = vsprintf(tmp, fmt, args);
   va_end(args);
 
   if (ret > 0) {
