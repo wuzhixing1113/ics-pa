@@ -129,6 +129,8 @@ static int decode_exec(Decode *s) {
     R(rd) = ((uint64_t)((int64_t)(int32_t)src1 * (int64_t)(int32_t)src2)) >> 32);
   INSTPAT("0000001 ????? ????? 010 ????? 01100 11", mulhsu , R, 
     R(rd) = ((uint64_t)((int64_t)(int32_t)src1 * (uint64_t)src2)) >> 32);
+  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu  , R, 
+    R(rd) = (uint64_t)((uint64_t)src1 * (uint64_t)src2) >> 32);
   INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div    , R, 
     R(rd) = src2 == 0 ? 0xffffffff : (int32_t)src1 / (int32_t)src2);
   INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu   , R, 
