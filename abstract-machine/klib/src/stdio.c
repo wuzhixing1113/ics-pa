@@ -36,8 +36,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     if (fmt[j] == '%') {
       j ++; int len = 1, width = 0;
       while (fmt[j] >= '0' && fmt[j] <= '9') {
-        len++, j++;
         width = width * 10 + (fmt[j] - '0');
+        len++, j++;
       }
       switch (fmt[j]) {
       case 'd': { // int
