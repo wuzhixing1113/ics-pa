@@ -37,17 +37,27 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
     if (fmt[j] == '%') continue;
     if (j == 0 || fmt[j - 1] != '%') out[i ++] = fmt[j];
     else if (fmt[j - 1] == '%') {
-      if (fmt[j] == 'd') {
+      switch (fmt[j]) {
+      case 'd': { // int
         int tmp = va_arg(ap, int);
         char str[32] = "";
         int_to_str(tmp, str);
         strcat(out, str);
         i += strlen(str);
+        break;
       }
-      else if (fmt[j] == 's') {
+      case 's': { // string
         char *s = va_arg(ap, char *);
         strcat(out, s);
         i += strlen(s);
+        break;
+      }
+      case 'c': { // character
+        out[i ++] = (char)va_arg(ap, int);
+        break;
+      }
+      default:
+        break;
       }
     }
     out[i] = '\0';
