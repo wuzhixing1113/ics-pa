@@ -53,7 +53,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         break;
       }
       case 'c': { // character
-        out[i ++] = (unsigned char)va_arg(ap, int);
+        out[i ++] = va_arg(ap, int);
         break;
       }
       default:
