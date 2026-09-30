@@ -60,7 +60,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         break;
       }
       case 'c': { // character
-        while (--width) out[i ++] = ' ';
+        while (width -- > 1) out[i ++] = ' ';
         out[i ++] = (unsigned char)va_arg(ap, int);
         break;
       }
