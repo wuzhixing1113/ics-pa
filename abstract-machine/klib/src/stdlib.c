@@ -29,7 +29,7 @@ int atoi(const char* nptr) {
   return x;
 }
 
-static int addr = _heap_start;
+static void* addr = &_heap_start;
 
 void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
