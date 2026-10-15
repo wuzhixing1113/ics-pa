@@ -58,7 +58,7 @@ word_t mmio_read(paddr_t addr, int len) {
   IOMap* cur_map = fetch_mmio_map(addr);
   word_t res = map_read(addr, len, cur_map);
 #ifdef CONFIG_DTRACE
-  printf("[dtrace] read  %s "FMT_PADDR" (%d Byte(s)) -> "FMT_WORD"\n", cur_map->name, addr, len, res);
+  printf("[dtrace] read  %s\t"FMT_PADDR" (%d Byte(s)) -> "FMT_WORD"\n", cur_map->name, addr, len, res);
 #endif
   return res;
 }
@@ -66,7 +66,7 @@ word_t mmio_read(paddr_t addr, int len) {
 void mmio_write(paddr_t addr, int len, word_t data) {
   IOMap* cur_map = fetch_mmio_map(addr);
 #ifdef CONFIG_DTRACE
-  printf("[dtrace] write %s "FMT_PADDR" (%d Byte(s)) <- "FMT_WORD"\n", cur_map->name, addr, len, data);
+  printf("[dtrace] write %s\t"FMT_PADDR" (%d Byte(s)) <- "FMT_WORD"\n", cur_map->name, addr, len, data);
 #endif
   map_write(addr, len, data, cur_map);
 }
