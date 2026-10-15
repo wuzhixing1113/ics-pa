@@ -19,7 +19,7 @@ _default:
 
 submit:
 	git gc
-	STUID=$(STUID) STUNAME=$(STUNAME) bash -c "$$(curl -s https://nasa.nju.edu.cn/icspa26/submit.sh)"
+	STUID=$(STUID) STUNAME=$(STUNAME) TOKEN=$(TOKEN) bash -c "$$(curl -s https://nasa.nju.edu.cn/icspa26/submit.sh)"
 
 count:
 	@find . \( -name "*.c" -o -name "*.h" \) -print0 | xargs -0 wc -l | tail -1
