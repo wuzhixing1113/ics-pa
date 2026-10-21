@@ -30,6 +30,10 @@ typedef struct {
 
 extern NEMUState nemu_state;
 
+// ----------- ftrace ----------
+
+void init_ftrace();
+
 // ----------- timer -----------
 
 uint64_t get_time();

@@ -17,8 +17,24 @@
 #include <cpu/difftest.h>
 #include "../local-include/reg.h"
 
+#define NR_REG 32
+
 bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
-  return false;
+  bool no_diff = true;
+  int i;
+  for (i = 0; i < NR_REG; i ++) {
+    if (ref_r->gpr[i] != gpr(i)) {
+      printf("At pc 0x%x: \tGPR x[%d] MISMATCH: ref: 0x%x, " 
+        "nemu: 0x%x", pc, i, ref_r->gpr[i], gpr(i));
+      no_diff = false;
+    }
+  }
+  if (ref_r->pc != cpu.pc) {
+    printf("At pc 0x%x: \tNEXT PC MISMATCH: ref: "
+      "0x%x, nemu: 0x%x\n", pc, ref_r->pc, cpu.pc);
+    no_diff = false;
+  }
+  return no_diff;
 }
 
 void isa_difftest_attach() {

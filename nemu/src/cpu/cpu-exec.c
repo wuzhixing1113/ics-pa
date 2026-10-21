@@ -33,11 +33,36 @@ static bool g_print_step = false;
 
 void device_update();
 
+#ifdef CONFIG_ITRACE
+static char ringbuf[MAX_INST_TO_PRINT][256];
+static int  ringbuf_idx = 0;
+
+static void iringbuf_write(const char* log) {
+  strncpy(ringbuf[ringbuf_idx], log, 255);
+  ringbuf[ringbuf_idx][255] = '\0';
+  ringbuf_idx = (ringbuf_idx + 1) % MAX_INST_TO_PRINT;
+}
+
+static void iringbuf_print() {
+  printf("Recent several instructions:\n");
+  for (int i = 0; i < MAX_INST_TO_PRINT; i ++) {
+    int k = (ringbuf_idx + i) % MAX_INST_TO_PRINT;
+    if (ringbuf[k][0] != '\0') 
+      printf("        %s\n", ringbuf[k]);
+  }
+}
+#endif
+
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+
+#ifdef CONFIG_ITRACE
+  iringbuf_write(_this->logbuf);
+#endif
+
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
 #ifdef CONFIG_WATCHPOINT
@@ -101,6 +126,9 @@ static void statistic() {
 
 void assert_fail_msg() {
   isa_reg_display();
+#ifdef CONFIG_ITRACE
+  iringbuf_print();
+#endif
   statistic();
 }
 

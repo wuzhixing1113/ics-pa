@@ -178,7 +178,7 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_x(char *args) {
-  char *arg1 = strtok(NULL, " "), *arg2 = strtok(NULL, " ");
+  char *arg1 = strtok(NULL, " "), *arg2 = strtok(NULL, "\0");
   if (arg1 == NULL || arg2 == NULL) {
     printf("Undefined x command\n");
     return 0;
