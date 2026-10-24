@@ -74,6 +74,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           i += strlen(str);
           break;
         }
+        case 'x': 
+        case 'X': { // hex
+          if (fmt[j] == 'x')
+          break;
+        }
         default: {
           for (int k = 1; k <= len; k ++) out[i ++] = fmt[j - len + k];
           break;
