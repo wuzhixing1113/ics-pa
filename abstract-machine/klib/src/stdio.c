@@ -14,6 +14,13 @@ static char *uint_to_str(unsigned int x, char *s) {
   return s;
 }
 
+static char *uint_to_hex_str(unsigned int x, char *s, bool upper) {
+  if (x > 15) s = uint_to_hex_str(x >> 4, s, upper);
+  *s++ = (x & 0xF) + ((x & 0xF) < 10 ? '0' : (upper ? 'A' - 10 : 'a' - 10));
+  *s = '\0';
+  return s;
+}
+
 int printf(const char *fmt, ...) {
   char tmp[MAX_READ_LEN];
   tmp[0] = '\0';
@@ -76,7 +83,13 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         }
         case 'x': 
         case 'X': { // hex
-          if (fmt[j] == 'x')
+          unsigned u = va_arg(ap, unsigned);
+          char str[64] = "";
+          uint_to_hex_str(u, str, fmt[j] == 'X');
+          while (width > strlen(str)) out[i ++] = '0', width --;
+          out[i] = '\0';
+          strcat(out, str);
+          i += strlen(str);
           break;
         }
         default: {
