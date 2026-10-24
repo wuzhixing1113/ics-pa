@@ -7,7 +7,7 @@
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
-char *uint_to_str(int x, char *s) {
+static char *uint_to_str(unsigned int x, char *s) {
   if (x > 9) s = uint_to_str(x / 10, s);
   *s++ = (x % 10) + '0';
   *s = '\0';
@@ -40,34 +40,44 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         len++, j++;
       }
       switch (fmt[j]) {
-      case 'd': { // int
-        int t = va_arg(ap, int);
-        char str[64] = "";
-        uint_to_str(t > 0 ? t : -t, str);
-        if(t < 0) out[i ++] = '-';
-        while (width > strlen(str) + (t < 0 ? 1 : 0)) out[i ++] = '0', width--;
-        out[i] = '\0';
-        strcat(out, str);
-        i += strlen(str);
-        break;
-      }
-      case 's': { // string
-        char *s = va_arg(ap, char *);
-        while (width > strlen(s)) out[i ++] = ' ', width--;
-        out[i] = '\0';
-        strcat(out, s);
-        i += strlen(s);
-        break;
-      }
-      case 'c': { // character
-        while (width -- > 1) out[i ++] = ' ';
-        out[i ++] = (unsigned char)va_arg(ap, int);
-        break;
-      }
-      default: {
-        for (int k = 1; k <= len; k ++) out[i ++] = fmt[j - len + k];
-        break;
-      }
+        case 'd': { // int
+          int t = va_arg(ap, int);
+          char str[64] = "";
+          uint_to_str(t > 0 ? t : -t, str);
+          if(t < 0) out[i ++] = '-';
+          while (width > strlen(str) + (t < 0 ? 1 : 0)) out[i ++] = '0', width--;
+          out[i] = '\0';
+          strcat(out, str);
+          i += strlen(str);
+          break;
+        }
+        case 's': { // string
+          char *s = va_arg(ap, char *);
+          while (width > strlen(s)) out[i ++] = ' ', width--;
+          out[i] = '\0';
+          strcat(out, s);
+          i += strlen(s);
+          break;
+        }
+        case 'c': { // character
+          while (width -- > 1) out[i ++] = ' ';
+          out[i ++] = (unsigned char)va_arg(ap, int);
+          break;
+        }
+        case 'u': { // unsigned int 
+          unsigned u = va_arg(ap, unsigned);
+          char str[64] = "";
+          uint_to_str(u, str);
+          while (width > strlen(str)) out[i ++] = '0', width --;
+          out[i] = '\0';
+          strcat(out, str);
+          i += strlen(str);
+          break;
+        }
+        default: {
+          for (int k = 1; k <= len; k ++) out[i ++] = fmt[j - len + k];
+          break;
+        }
       }
       j ++;
     }
