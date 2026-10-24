@@ -20,8 +20,9 @@ int abs(int x) {
 }
 
 int atoi(const char* nptr) {
-  int x = 0;
+  int x = 0, sgn = 1;
   while (*nptr == ' ') { nptr ++; }
+  while (*nptr == '+' || *nptr == '-') {sgn *= (*nptr ++ == '+' ? 1 : -1);}
   while (*nptr >= '0' && *nptr <= '9') {
     x = x * 10 + *nptr - '0';
     nptr ++;
