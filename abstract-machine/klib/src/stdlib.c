@@ -27,7 +27,7 @@ int atoi(const char* nptr) {
     x = x * 10 + *nptr - '0';
     nptr ++;
   }
-  return x;
+  return x * sgn;
 }
 
 static void* addr = NULL;
