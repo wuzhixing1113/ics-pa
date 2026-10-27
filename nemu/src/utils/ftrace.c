@@ -1,4 +1,5 @@
 #include <common.h>
+#include <elf.h>
 
 #ifdef CONFIG_FTRACE
 
@@ -53,7 +54,7 @@ void ftrace_call(vaddr_t pc, vaddr_t target) {
 
 void ftrace_ret(vaddr_t pc) {
     if (!enabled) return;
-    depth --;
+    if (depth > 0) depth --;
     char *p = ftrace_buf;
     p += snprintf(p, sizeof(ftrace_buf), FMT_WORD ": %*sret  [%s]",
          pc, depth * 2, "", find_funct(pc));
