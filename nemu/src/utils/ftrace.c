@@ -51,7 +51,7 @@ static bool parse_elf(const char *elf_file) {
     if (fseek(fp, 0, SEEK_END) != 0) return fclose(fp), false;
     long sz = ftell(fp);
     if (sz <= 0) return fclose(fp), false;
-    if (fseek(fp, 0, SEEK_END) != 0) return fclose(fp), false;
+    if (fseek(fp, 0, SEEK_SET) != 0) return fclose(fp), false;
 
     elf_data = malloc((size_t)sz);
     if (elf_data == NULL) return fclose(fp), false;
