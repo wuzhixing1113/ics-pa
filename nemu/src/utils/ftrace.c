@@ -1,5 +1,10 @@
 #include <common.h>
 
-void init_ftrace() {
-    
+#ifdef CONFIG_FTRACE
+
+void init_ftrace(const char* elf_file) {
+
 }
+
+
+#endif

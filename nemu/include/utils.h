@@ -32,7 +32,7 @@ extern NEMUState nemu_state;
 
 // ----------- ftrace ----------
 
-void init_ftrace();
+void init_ftrace(const char* elf_file);
 
 // ----------- timer -----------
 
