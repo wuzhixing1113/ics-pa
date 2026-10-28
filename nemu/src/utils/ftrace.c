@@ -93,7 +93,7 @@ static bool parse_elf(const char *elf_file) {
         for (int j = 0; j < n && nr_funct < NR_FUNCT; j++) {                                                                                                         
             unsigned char *sym = elf_data + sym_off + j * sym_ent;                                                                                                   
                                                                                                                                                                           
-            uint32_t nameoff = rd32(sym + 0);                                                                                                                        
+            uint32_t nameoff = rd32(sym);                                                                                                                        
             uint32_t value   = rd32(sym + 4);                                                                                                                        
             uint32_t size    = rd32(sym + 8);                                                                                                                        
             unsigned char info = sym[12];                                                                                                                            
